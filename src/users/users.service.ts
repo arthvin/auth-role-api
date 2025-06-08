@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -33,11 +33,29 @@ export class UsersService {
     return this.userRepo.findOne({ where: { id } });
   }
 
-  update(id: number, update: Partial<User>) {
-    return this.userRepo.update(id, update);
+  async findOneWithAuthorization(id: number, user: User): Promise<User> {
+    if (user.role !== 'admin' && user.id !== id) {
+      throw new UnauthorizedException('Access denied.');
+    }
+    const foundUser = await this.findOne(id);
+    if (!foundUser) {
+      throw new UnauthorizedException('User not found.');
+    }
+    return foundUser;
   }
 
-  remove(id: number) {
+  async updateWithAuthorization(id: number, update: Partial<User>, user: User) {
+    if (user.role !== 'admin' && user.id !== id) {
+      throw new UnauthorizedException('Access denied.');
+    }
+    await this.userRepo.update(id, update);
+    return this.findOne(id);
+  }
+
+  async removeWithAuthorization(id: number, user: User) {
+    if (user.role !== 'admin' && user.id !== id) {
+      throw new UnauthorizedException('Access denied.');
+    }
     return this.userRepo.delete(id);
   }
 }
