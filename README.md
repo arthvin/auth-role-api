@@ -120,4 +120,9 @@ A API possui proteção baseada em perfis (roles), utilizando o decorator:
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('admin') // ou 'admin', 'user'
 
-Arthur Vinicius de Oliveira Semensati RA: 23105149-2
+Arthur Vinícius de Oliveira Semensati -231051492
+Daniel Barrionuevo Gomes - 220144962
+Natanael Figueredo Balbo - 220141852
+Rodrigo Shodi Sumioshi - 220141912
+Vinicius Luiz Santa Rosa - 240421212
+Pablo Vinicius Formagio Lima - 19933212
